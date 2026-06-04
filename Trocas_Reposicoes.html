@@ -108,7 +108,7 @@ select option{background:#1e3a5f}
       <div class="topbar-logo">TR</div>
       <div>
         <h1>Trocas & Reposições</h1>
-        <div class="sub">CDD Curitiba · atualizado em 04/06/2026 20:13</div>
+        <div class="sub">CDD Curitiba · atualizado em 04/06/2026 20:17</div>
       </div>
     </div>
   </div>
@@ -327,7 +327,9 @@ function render(){
       // Urgência só aparece se tiver pedido (não aguardando)
       const temPedido = d.sit_atend !== 'Ag. Atendimento';
       const isAtendido = d.sit_atend==='Atendido' || d.sit_atend==='Atendido Parcial';
+      const isFalta = d.sit_atend==='Falta';
       const urgLabel = isAtendido ? '🟢 OK'
+        : isFalta    ? '🔴 Falta'
         : d.urgencia==='critico' ? '🔴 Crítico'
         : d.urgencia==='alerta'  ? '🟡 Alerta'
         : '🟢 Recente';

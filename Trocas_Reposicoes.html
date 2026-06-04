@@ -4,81 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Trocas & Reposições</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f5f6f8;
-  --surface:#ffffff;
-  --surface2:#f0f2f5;
-  --border:#e4e7ec;
-  --border2:#d0d5dd;
-
-  --ink:#111827;
-  --ink2:#374151;
-  --muted:#6b7280;
-  --muted2:#9ca3af;
-
-  --accent:#1d4ed8;
-  --accent-light:#dbeafe;
-
-  --ok:#059669;
-  --ok-bg:#d1fae5;
-  --ok-border:#6ee7b7;
-  --alerta:#d97706;
-  --alerta-bg:#fef3c7;
-  --alerta-border:#fcd34d;
-  --critico:#dc2626;
-  --critico-bg:#fee2e2;
-  --critico-border:#fca5a5;
-
-  --troca:#1d4ed8;
-  --troca-bg:#dbeafe;
-  --remessa:#7c3aed;
-  --remessa-bg:#ede9fe;
-
-  --header:#0f172a;
-  --header2:#1e293b;
-
-  --font:'DM Sans',sans-serif;
-  --font-mono:'DM Mono',monospace;
-  --font-display:'Syne',sans-serif;
-  --radius:8px;
+  --bg:#f0f4f8;--surface:#fff;--border:#e2e8f0;
+  --navy:#1e3a5f;--navy2:#152d4a;--text:#1e293b;--muted:#64748b;
+  --ok:#16a34a;--ok-bg:#dcfce7;
+  --alerta:#d97706;--alerta-bg:#fef3c7;
+  --critico:#dc2626;--critico-bg:#fee2e2;
+  --troca:#0369a1;--troca-bg:#e0f2fe;
+  --remessa:#7c3aed;--remessa-bg:#ede9fe;
+  --font:'Barlow',sans-serif;--font2:'Barlow Condensed',sans-serif;
 }
-
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--ink);font-family:var(--font);min-height:100vh;padding-bottom:60px;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;padding-bottom:60px}
 
-/* ── TOPBAR ── */
-.topbar{
-  background:var(--header);
-  color:#fff;
-  padding:0 24px;
-  position:sticky;top:0;z-index:100;
-  border-bottom:1px solid rgba(255,255,255,.06);
-  box-shadow:0 1px 16px rgba(0,0,0,.35);
-}
-.topbar-inner{
-  max-width:1080px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;gap:16px;
-  height:52px;
-}
+.topbar{background:#0f172a;color:#fff;padding:0 20px;position:sticky;top:0;z-index:100;box-shadow:0 1px 16px rgba(0,0,0,.35);border-bottom:1px solid rgba(255,255,255,.06)}
+.topbar-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;height:52px}
 .topbar-left{display:flex;align-items:center;gap:12px}
-.topbar-logo{
-  width:30px;height:30px;border-radius:6px;
-  background:var(--accent);
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--font-display);font-size:.85rem;font-weight:800;color:#fff;
-  letter-spacing:-.02em;flex-shrink:0;
-}
-.topbar-title{font-family:var(--font-display);font-size:.95rem;font-weight:800;letter-spacing:-.01em;color:#fff}
-.topbar-sub{font-size:.68rem;color:rgba(255,255,255,.38);margin-top:1px;font-family:var(--font-mono)}
+.topbar-logo{width:30px;height:30px;border-radius:6px;background:#1d4ed8;display:flex;align-items:center;justify-content:center;font-family:var(--font2);font-size:.85rem;font-weight:800;color:#fff;flex-shrink:0}
+.topbar h1{font-family:var(--font2);font-size:1.1rem;font-weight:800}
+.topbar .sub{font-size:.7rem;opacity:.38;margin-top:1px;font-family:var(--font2)}
 .pills{display:flex;gap:6px;align-items:center}
-.pill{
-  display:flex;align-items:center;gap:5px;
-  border-radius:5px;padding:4px 10px;
-  font-family:var(--font-mono);font-size:.68rem;font-weight:500;
-  border:1px solid transparent;
-}
+.pill{display:flex;align-items:center;gap:5px;border-radius:5px;padding:4px 10px;font-family:var(--font2);font-size:.72rem;font-weight:700;border:1px solid transparent}
 .pill-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .pill.critico{background:rgba(220,38,38,.15);color:#fca5a5;border-color:rgba(220,38,38,.25)}
 .pill.critico .pill-dot{background:#ef4444}
@@ -87,172 +35,68 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font);min-height:10
 .pill.ok{background:rgba(5,150,105,.15);color:#6ee7b7;border-color:rgba(5,150,105,.25)}
 .pill.ok .pill-dot{background:#10b981}
 
-/* ── FILTERS ── */
-.filters{
-  background:var(--header2);
-  padding:10px 24px;
-  border-bottom:2px solid rgba(255,255,255,.04);
-}
-.filters-inner{max-width:1080px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
+.filters{background:var(--navy2);padding:10px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
+.filters-inner{max-width:960px;margin:0 auto;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
 .fg{display:flex;flex-direction:column;gap:3px}
-.fg label{
-  font-size:.6rem;color:rgba(255,255,255,.38);
-  text-transform:uppercase;letter-spacing:.08em;font-weight:600;
-}
-select,input[type=text]{
-  background:rgba(255,255,255,.07);
-  color:#e2e8f0;
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:6px;
-  padding:6px 10px;
-  font-family:var(--font);font-size:.78rem;
-  cursor:pointer;outline:none;
-  min-width:120px;
-  transition:border-color .15s,background .15s;
-}
-select:focus,input[type=text]:focus{
-  border-color:rgba(99,144,255,.6);
-  background:rgba(255,255,255,.1);
-}
-select option{background:#1e293b}
-input[type=text]::placeholder{color:rgba(255,255,255,.25)}
+.fg label{font-size:.62rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+select{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:7px 10px;font-family:var(--font);font-size:.82rem;cursor:pointer;outline:none;min-width:110px}
+select:focus{border-color:#00e5a0}
+select option{background:#1e3a5f}
 
-/* ── CONTENT ── */
-.content{max-width:1080px;margin:0 auto;padding:18px 20px}
-.count-bar{
-  font-size:.72rem;color:var(--muted);margin-bottom:14px;
-  display:flex;align-items:center;gap:6px;
-}
-.count-bar strong{color:var(--ink2);font-weight:600}
-.count-divider{width:1px;height:10px;background:var(--border2)}
+.content{max-width:960px;margin:0 auto;padding:20px 16px}
+.count-bar{font-size:.78rem;color:var(--muted);margin-bottom:14px}
+.count-bar strong{color:var(--text)}
 
-/* ── SETOR ── */
-.setor-block{margin-bottom:22px}
-.setor-hdr{
-  display:flex;justify-content:space-between;align-items:center;
-  flex-wrap:wrap;gap:8px;
-  margin-bottom:8px;
-  padding:0 2px;
-}
-.setor-left{display:flex;align-items:center;gap:8px}
-.setor-label{
-  font-size:.6rem;font-weight:700;
-  text-transform:uppercase;letter-spacing:.1em;
-  color:var(--muted);
-  background:var(--surface2);
-  border:1px solid var(--border);
-  padding:2px 8px;border-radius:4px;
-}
-.setor-title{font-family:var(--font-display);font-size:.92rem;font-weight:800;color:var(--ink);letter-spacing:-.01em}
-.setor-stats{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
-.setor-stat{
-  font-size:.63rem;padding:2px 8px;border-radius:4px;font-weight:600;
-  display:flex;align-items:center;gap:4px;
-}
-.setor-stat.critico{background:var(--critico-bg);color:var(--critico);border:1px solid var(--critico-border)}
-.setor-stat.alerta{background:var(--alerta-bg);color:var(--alerta);border:1px solid var(--alerta-border)}
-.setor-count{font-size:.68rem;color:var(--muted);font-weight:500}
+.setor-block{margin-bottom:28px}
+.setor-hdr{background:var(--navy);color:#fff;border-radius:10px;padding:11px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.setor-title{font-family:var(--font2);font-size:1rem;font-weight:800}
+.setor-stats{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.setor-stat{font-size:.68rem;padding:2px 8px;border-radius:20px;font-weight:700;font-family:var(--font2)}
+.setor-stat.critico{background:var(--critico);color:#fff}
+.setor-stat.alerta{background:var(--alerta);color:#fff}
 
-.setor-line{
-  height:1px;
-  background:linear-gradient(90deg,var(--border2) 0%,var(--border) 60%,transparent 100%);
-  margin-bottom:10px;
-}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px}
 
-/* ── CARDS GRID ── */
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:8px}
+.card{background:var(--surface);border-radius:10px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.07);border-left:4px solid #cbd5e1}
+.card.ok{border-left-color:var(--ok)}
+.card.alerta{border-left-color:var(--alerta)}
+.card.critico{border-left-color:var(--critico)}
+.card.pendente{border-left-color:#94a3b8}
 
-/* ── CARD ── */
-.card{
-  background:var(--surface);
-  border-radius:var(--radius);
-  padding:11px 12px;
-  border:1px solid var(--border);
-  box-shadow:0 1px 3px rgba(0,0,0,.05);
-  position:relative;
-  overflow:hidden;
-  transition:box-shadow .15s,transform .15s;
-}
-.card:hover{box-shadow:0 4px 12px rgba(0,0,0,.1);transform:translateY(-1px)}
-
-/* barra de status no topo */
-.card::before{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:2px;
-  background:var(--border2);
-}
-.card.ok::before{background:var(--ok)}
-.card.alerta::before{background:var(--alerta)}
-.card.critico::before{background:var(--critico)}
-
-/* ── CARD TOP ── */
-.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:6px}
-.card-cod{
-  font-family:var(--font-display);font-size:.9rem;font-weight:800;
-  color:var(--ink);letter-spacing:-.01em;
-}
-.card-badges{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end}
-
-.badge{
-  font-size:.57rem;font-weight:600;
-  padding:2px 6px;border-radius:4px;
-  white-space:nowrap;letter-spacing:.02em;
-  border:1px solid transparent;
-}
-.badge.ok{background:var(--ok-bg);color:var(--ok);border-color:var(--ok-border)}
-.badge.alerta{background:var(--alerta-bg);color:var(--alerta);border-color:var(--alerta-border)}
-.badge.critico{background:var(--critico-bg);color:var(--critico);border-color:var(--critico-border)}
-.badge.pendente{background:var(--surface2);color:var(--muted);border-color:var(--border2)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:8px}
+.card-cod{font-family:var(--font2);font-size:1rem;font-weight:800;color:var(--navy)}
+.card-badges{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.badge{font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:4px;font-family:var(--font2);text-transform:uppercase;white-space:nowrap}
 .badge.troca{background:var(--troca-bg);color:var(--troca)}
 .badge.remessa{background:var(--remessa-bg);color:var(--remessa)}
+.badge.misto{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0}
+.badge.ok{background:var(--ok-bg);color:var(--ok)}
+.badge.alerta{background:var(--alerta-bg);color:var(--alerta)}
+.badge.critico{background:var(--critico-bg);color:var(--critico)}
+.badge.pendente{background:#f1f5f9;color:#64748b}
 
-/* ── PROD LIST ── */
-.prod-list{margin-bottom:8px}
-.prod-item{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:4px 0;border-bottom:1px solid var(--border);gap:8px;
-}
+/* Lista de produtos dentro do card */
+.prod-list{margin-bottom:10px}
+.prod-item{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--border);gap:8px}
 .prod-item:last-child{border-bottom:none;padding-bottom:0}
-.prod-nome{font-size:.72rem;color:var(--ink2);font-weight:500;line-height:1.3;flex:1}
-.prod-meta{display:flex;align-items:center;gap:5px;flex-shrink:0}
-.prod-qtd{font-family:var(--font-mono);font-size:.68rem;font-weight:500;color:var(--muted)}
-.prod-tipo{font-size:.55rem;font-weight:600;padding:1px 5px;border-radius:3px;letter-spacing:.02em}
+.prod-nome{font-size:.78rem;color:var(--text);font-weight:500;line-height:1.3;flex:1}
+.prod-meta{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0}
+.prod-qtd{font-family:var(--font2);font-size:.75rem;font-weight:700;color:var(--muted)}
+.prod-tipo{font-size:.58rem;font-weight:700;padding:1px 5px;border-radius:3px;font-family:var(--font2)}
 .prod-tipo.troca{background:var(--troca-bg);color:var(--troca)}
 .prod-tipo.remessa{background:var(--remessa-bg);color:var(--remessa)}
 
-/* ── CARD TOTAL ── */
-.card-total{
-  display:flex;justify-content:space-between;align-items:center;
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:6px;padding:5px 9px;margin-bottom:8px;
-}
-.card-total-lbl{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:600}
-.card-total-val{font-family:var(--font-mono);font-size:.85rem;font-weight:500;color:var(--ink)}
+.card-total{background:#f8fafc;border-radius:6px;padding:7px 10px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.card-total-lbl{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.card-total-val{font-family:var(--font2);font-size:.95rem;font-weight:800;color:var(--navy)}
 
-/* ── CARD FOOTER ── */
-.card-footer{
-  display:flex;justify-content:space-between;align-items:center;
-  padding-top:7px;border-top:1px solid var(--border);
-  font-size:.65rem;color:var(--muted);
-}
-.footer-status{display:flex;align-items:center;gap:4px}
-.footer-sit{
-  font-size:.62rem;color:var(--muted2);
-  background:var(--surface2);border:1px solid var(--border);
-  padding:1px 6px;border-radius:3px;
-}
-.idade-badge{
-  font-family:var(--font-mono);font-size:.68rem;font-weight:500;
-  padding:2px 8px;border-radius:4px;border:1px solid transparent;
-}
-.idade-badge.ok{background:var(--ok-bg);color:var(--ok);border-color:var(--ok-border)}
-.idade-badge.alerta{background:var(--alerta-bg);color:var(--alerta);border-color:var(--alerta-border)}
-.idade-badge.critico{background:var(--critico-bg);color:var(--critico);border-color:var(--critico-border)}
+.card-footer{display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid var(--border);font-size:.7rem;color:var(--muted)}
+.idade-badge{font-family:var(--font2);font-size:.78rem;font-weight:800;padding:3px 10px;border-radius:20px}
+.idade-badge.ok{background:var(--ok-bg);color:var(--ok)}
+.idade-badge.alerta{background:var(--alerta-bg);color:var(--alerta)}
+.idade-badge.critico{background:var(--critico-bg);color:var(--critico)}
 
-.empty{
-  text-align:center;padding:60px 20px;color:var(--muted);
-  font-size:.85rem;
-}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -262,8 +106,8 @@ input[type=text]::placeholder{color:rgba(255,255,255,.25)}
     <div class="topbar-left">
       <div class="topbar-logo">TR</div>
       <div>
-        <div class="topbar-title">Trocas &amp; Reposições</div>
-        <div class="topbar-sub">CDD Curitiba · 04/06/2026 19:36</div>
+        <h1>Trocas & Reposições</h1>
+        <div class="sub">CDD Curitiba · atualizado em 04/06/2026 19:40</div>
       </div>
     </div>
     <div class="pills">
@@ -382,13 +226,14 @@ input[type=text]::placeholder{color:rgba(255,255,255,.25)}
     <div class="fg"><label>Urgência</label>
       <select id="filUrgencia" onchange="render()">
         <option value="all">Todas</option>
-        <option value="critico">● Crítico (12-14d)</option>
-        <option value="alerta">● Alerta (8-11d)</option>
-        <option value="ok">● OK (1-7d)</option>
+        <option value="critico">🔴 Crítico (12-14d)</option>
+        <option value="alerta">🟡 Alerta (8-11d)</option>
+        <option value="ok">🟢 OK (1-7d)</option>
       </select>
     </div>
     <div class="fg"><label>Cód. Cliente</label>
-      <input type="text" id="filCodigo" placeholder="Ex: 2739" oninput="render()" style="width:110px">
+      <input type="text" id="filCodigo" placeholder="Ex: 2739" oninput="render()"
+        style="background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:7px 10px;font-family:var(--font);font-size:.82rem;outline:none;width:110px;">
     </div>
   </div>
 </div>
@@ -422,6 +267,7 @@ function render(){
   let f = DATA.filter(d => {
     if(sala!=='all' && d.sala!==sala) return false;
     if(setor!=='all' && d.setor!==setor) return false;
+    // Filtro tipo: verifica se algum produto do grupo bate
     if(tipo!=='all' && !d.produtos.some(p=>p.tipo===tipo)) return false;
     if(sitAtend!=='all'){
       const isAguard = d.sit_atend==='Ag. Atendimento' || d.sit_atend==='Aguard. Pedido';
@@ -440,12 +286,10 @@ function render(){
   document.getElementById('p-alerta').textContent  = DATA.filter(d=>d.urgencia==='alerta').length+' alerta';
   document.getElementById('p-ok').textContent      = DATA.filter(d=>d.urgencia==='ok').length+' ok';
 
-  document.getElementById('countBar').innerHTML=
-    `Exibindo <strong>${f.length}</strong> de ${DATA.length} registros`+
-    (f.length<DATA.length?` <span class="count-divider"></span> <span>${DATA.length-f.length} oculto${DATA.length-f.length!==1?'s':''}</span>`:'');
+  document.getElementById('countBar').innerHTML=`Exibindo <strong>${f.length}</strong> clientes de ${DATA.length} registros`;
 
   const app=document.getElementById('app');
-  if(!f.length){app.innerHTML='<div class="empty">Nenhum registro encontrado para os filtros selecionados.</div>';return;}
+  if(!f.length){app.innerHTML='<div class="empty">Nenhum registro encontrado.</div>';return;}
 
   const setores=[...new Set(f.map(d=>d.setor))].sort((a,b)=>parseInt(a)-parseInt(b));
 
@@ -456,16 +300,19 @@ function render(){
     const nAlert=itens.filter(d=>d.urgencia==='alerta').length;
 
     const statsHtml=[
-      nCrit>0?`<span class="setor-stat critico">● ${nCrit} crítico${nCrit>1?'s':''}</span>`:'',
-      nAlert>0?`<span class="setor-stat alerta">● ${nAlert} alerta${nAlert>1?'s':''}</span>`:'',
+      nCrit>0?`<span class="setor-stat critico">🔴 ${nCrit} crítico${nCrit>1?'s':''}</span>`:'',
+      nAlert>0?`<span class="setor-stat alerta">🟡 ${nAlert} alerta${nAlert>1?'s':''}</span>`:'',
     ].filter(Boolean).join('');
 
     const cards=itens.map(d=>{
       const cardClass=d.sit_atend==='Ag. Atendimento'?'card critico':`card ${d.urgencia}`;
 
+
+
+      // Urgência só aparece se tiver pedido (não aguardando)
       const temPedido = d.sit_atend !== 'Ag. Atendimento';
       const urgBadge = temPedido
-        ? `<span class="badge ${d.urgencia}">${d.urgencia==='critico'?'● Crítico':d.urgencia==='alerta'?'● Alerta':'● OK'}</span>`
+        ? `<span class="badge ${d.urgencia}">${d.urgencia==='critico'?'🔴 Crítico':d.urgencia==='alerta'?'🟡 Alerta':'🟢 OK'}</span>`
         : '';
       const sitAtendBadge = d.sit_atend==='Ag. Atendimento'
         ? '<span class="badge pendente">Aguardando Pedido</span>'
@@ -473,28 +320,30 @@ function render(){
         : d.sit_atend==='Atendido Parcial' ? '<span class="badge alerta">Atend. Parcial</span>'
         : '';
 
+      // Lista de produtos
       const prodList=d.produtos.map(p=>{
         const tipoClass=p.tipo==='Troca'?'troca':'remessa';
         return `<div class="prod-item">
           <div class="prod-nome">${p.produto}</div>
           <div class="prod-meta">
-            <span class="prod-qtd">${p.qtd}un</span>
+            <span class="prod-qtd">${p.qtd} un</span>
             <span class="prod-tipo ${tipoClass}">${p.tipo}</span>
           </div>
         </div>`;
       }).join('');
 
+      const diasFalta = 15 - d.max_idade;
       const temData = d.sit_pedido !== 'Ag. Roteirização';
       const footer = temPedido
         ? `<div class="card-footer">
-            <div class="footer-status">
-              <span class="footer-sit">${temData ? d.data+' · ' : ''}${d.sit_pedido}</span>
+            <span>${temData ? d.data + ' · ' : ''}${d.sit_pedido}</span>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span class="idade-badge ${d.urgencia}">${d.max_idade} dia${d.max_idade!==1?'s':''}</span>
             </div>
-            <span class="idade-badge ${d.urgencia}">${d.max_idade}d</span>
           </div>`
         : `<div class="card-footer">
-            <span class="footer-sit">${d.sit_pedido}</span>
-            <span class="idade-badge ${d.urgencia}">${d.max_idade}d</span>
+            <span>${d.sit_pedido}</span>
+            <span class="idade-badge ${d.urgencia}">${d.max_idade} dia${d.max_idade!==1?'s':''}</span>
           </div>`;
 
       return `<div class="${cardClass}">
@@ -513,14 +362,15 @@ function render(){
 
     return `<div class="setor-block">
       <div class="setor-hdr">
-        <div class="setor-left">
-          <span class="setor-label">Sala ${sala_s}</span>
+        <div style="display:flex;align-items:center;gap:8px">
           <span class="setor-title">Setor ${s}</span>
-          <span class="setor-count">${itens.length} cliente${itens.length!==1?'s':''}</span>
+          <span style="font-size:.65rem;opacity:.5;background:rgba(255,255,255,.1);padding:2px 8px;border-radius:4px">Sala ${sala_s}</span>
         </div>
-        <div class="setor-stats">${statsHtml||''}</div>
+        <div class="setor-stats">
+          ${statsHtml||''}
+          <span style="font-size:.7rem;opacity:.5">${itens.length} cliente${itens.length!==1?'s':''}</span>
+        </div>
       </div>
-      <div class="setor-line"></div>
       <div class="cards">${cards}</div>
     </div>`;
   }).join('');

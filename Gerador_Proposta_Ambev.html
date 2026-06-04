@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Proposta Ambev</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f0e8;--surface:#fff;--border:#e0d8cc;
+  --navy:#0d1f3c;--gold:#f5a800;--gold2:#e09000;
+  --red:#c8102e;--green:#00875a;--text:#1a1a2e;--muted:#7a7a8a;
+  --font:'Barlow',sans-serif;--font2:'Barlow Condensed',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;padding:0 0 80px}
+.app{max-width:520px;margin:0 auto;padding:0 16px}
+
+header{padding:28px 0 20px;border-bottom:2px solid var(--navy);margin-bottom:24px}
+.header-top{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.ambev-logo{width:48px;height:48px;background:var(--navy);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+header h1{font-family:var(--font2);font-size:1.6rem;font-weight:900;color:var(--navy);line-height:1;letter-spacing:.5px}
+header p{font-size:.8rem;color:var(--muted);margin-top:2px}
+
+.section{margin-bottom:20px}
+.section-title{font-family:var(--font2);font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.field label{font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+input,select{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-family:var(--font);font-size:.92rem;color:var(--text);outline:none;transition:border-color .15s}
+input:focus,select:focus{border-color:var(--navy)}
+select{cursor:pointer}
+select option{background:#fff}
+
+/* ===== VOZ ===== */
+.voz-section{background:var(--navy);border-radius:14px;padding:18px;margin-bottom:20px}
+.voz-title{font-family:var(--font2);font-size:.72rem;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+.btn-mic{width:100%;background:var(--gold);color:var(--navy);border:none;border-radius:10px;padding:14px;font-family:var(--font2);font-size:1rem;font-weight:900;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .15s}
+.btn-mic:hover{background:var(--gold2)}
+.btn-mic.gravando{background:#ff4444;color:#fff;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.btn-mic svg{width:20px;height:20px;flex-shrink:0}
+.voz-status{margin-top:10px;font-size:.78rem;color:rgba(255,255,255,.5);text-align:center;min-height:18px}
+.voz-transcricao{margin-top:8px;background:rgba(255,255,255,.08);border-radius:8px;padding:10px 12px;font-size:.82rem;color:rgba(255,255,255,.8);min-height:36px;font-style:italic;display:none}
+.voz-transcricao.show{display:block}
+
+.voz-hint{font-size:.72rem;color:rgba(255,255,255,.35);margin-top:10px;line-height:1.5;text-align:center}
+
+/* ===== CONFIRMAÇÃO ===== */
+.confirmacao-wrap{display:none;background:var(--surface);border:2px solid var(--gold);border-radius:12px;padding:16px;margin-bottom:16px}
+.confirmacao-wrap.show{display:block}
+.conf-title{font-family:var(--font2);font-size:.75rem;font-weight:700;color:var(--gold2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.conf-item{background:#fffdf5;border:1.5px solid var(--border);border-radius:8px;padding:11px 12px;margin-bottom:8px}
+.conf-item-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.conf-item-nome{font-family:var(--font2);font-size:.95rem;font-weight:700;color:var(--navy)}
+.conf-item-campos{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px}
+.conf-campo{display:flex;flex-direction:column;gap:2px}
+.conf-campo label{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.conf-campo input{font-size:.82rem;padding:6px 8px;text-align:center;border-radius:6px}
+.conf-pontos-row{margin-top:8px;display:flex;align-items:center;gap:8px}
+.conf-pontos-row label{font-size:.72rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.conf-pontos-row input{flex:1;font-size:.82rem;padding:6px 8px}
+.conf-acoes{display:flex;gap:8px;margin-top:12px}
+.btn-confirmar{flex:1;background:var(--green);color:#fff;border:none;border-radius:8px;padding:11px;font-family:var(--font2);font-size:.9rem;font-weight:800;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;transition:opacity .15s}
+.btn-confirmar:hover{opacity:.9}
+.btn-rejeitar{flex:1;background:transparent;border:1.5px solid var(--border);color:var(--muted);border-radius:8px;padding:11px;font-family:var(--font2);font-size:.9rem;font-weight:700;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;transition:all .15s}
+.btn-rejeitar:hover{border-color:var(--red);color:var(--red)}
+
+/* ===== PRODUTOS ADICIONADOS ===== */
+.produto-item{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px}
+.produto-item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
+.produto-nome{font-family:var(--font2);font-size:.95rem;font-weight:700;color:var(--navy)}
+.produto-pontos{font-size:.7rem;background:#fff7e0;color:var(--gold2);border:1px solid #fce08a;border-radius:4px;padding:2px 7px;font-weight:700;font-family:var(--font2)}
+.btn-remove{background:none;border:none;color:#ccc;font-size:1.1rem;cursor:pointer;padding:0 2px;line-height:1;transition:color .15s;flex-shrink:0}
+.btn-remove:hover{color:var(--red)}
+.produto-inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.produto-inputs input{font-size:.82rem;padding:7px 8px;text-align:center}
+.produto-inputs label{font-size:.6rem;color:var(--muted);text-align:center;display:block;margin-bottom:2px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.produto-total{text-align:right;margin-top:6px;font-family:var(--font2);font-size:.82rem;color:var(--muted)}
+.produto-total span{color:var(--navy);font-weight:700;font-size:.95rem}
+
+/* Manual add */
+.select-produto-wrap{display:flex;gap:8px;margin-bottom:8px}
+.select-produto-wrap select{flex:1}
+.btn-add-manual{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:10px 14px;font-family:var(--font2);font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity .15s;flex-shrink:0}
+.btn-add-manual:hover{opacity:.85}
+
+.btn-gerar{width:100%;background:var(--navy);color:#fff;border:none;border-radius:10px;padding:14px;font-family:var(--font2);font-size:1.1rem;font-weight:800;cursor:pointer;margin-top:8px;letter-spacing:.08em;text-transform:uppercase;transition:opacity .15s}
+.btn-gerar:hover{opacity:.9}
+.btn-gerar:disabled{opacity:.3;cursor:not-allowed}
+
+/* ===== PROPOSTA ===== */
+#propostaWrap{display:none;margin-top:28px}
+#propostaWrap.show{display:block}
+.proposta{background:var(--navy);border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(13,31,60,.25)}
+.prop-header{background:linear-gradient(135deg,#0d1f3c 0%,#162a50 100%);padding:24px 24px 20px;position:relative;overflow:hidden}
+.prop-header::before{content:'';position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:rgba(245,168,0,.08);pointer-events:none}
+.prop-header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.prop-logo{display:flex;align-items:center;gap:10px}
+.prop-logo-box{width:40px;height:40px;background:var(--gold);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.prop-logo-text{font-family:var(--font2);color:#fff;font-size:1.1rem;font-weight:900;letter-spacing:.5px}
+.prop-logo-sub{font-size:.65rem;color:rgba(255,255,255,.5);font-weight:400;letter-spacing:.05em;margin-top:1px}
+.prop-validade{background:rgba(245,168,0,.15);border:1px solid rgba(245,168,0,.3);border-radius:6px;padding:5px 10px;font-family:var(--font2);font-size:.65rem;color:var(--gold);font-weight:700;letter-spacing:.07em;text-transform:uppercase;text-align:center}
+.prop-cliente-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 16px}
+.prop-cliente-label{font-size:.6rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-bottom:4px}
+.prop-cliente-nome{font-family:var(--font2);font-size:1.4rem;font-weight:900;color:#fff;letter-spacing:.5px;line-height:1}
+.prop-body{padding:20px 24px}
+.prop-table-header{display:grid;grid-template-columns:1fr 55px 75px 60px 80px;gap:4px;padding:0 0 8px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:8px}
+.prop-table-header span{font-size:.6rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.prop-table-header span:not(:first-child){text-align:center}
+.prop-row{display:grid;grid-template-columns:1fr 55px 75px 60px 80px;gap:4px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);align-items:center}
+.prop-row-nome{font-family:var(--font2);font-size:.9rem;font-weight:700;color:#fff;line-height:1.2}
+.prop-row-pts{font-size:.65rem;color:var(--gold);font-weight:600;margin-top:2px;font-family:var(--font2)}
+.prop-row-val{font-family:'Barlow Condensed',sans-serif;font-size:.88rem;color:rgba(255,255,255,.75);text-align:center}
+.prop-row-val.desc{color:var(--gold)}
+.prop-row-val.total{color:#fff;font-weight:700;font-size:.92rem}
+.prop-totais{margin-top:16px;background:rgba(255,255,255,.05);border-radius:10px;padding:14px 16px}
+.prop-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:.82rem}
+.prop-total-row:last-child{margin-bottom:0}
+.prop-total-lbl{color:rgba(255,255,255,.5)}
+.prop-total-val{font-family:var(--font2);color:rgba(255,255,255,.8);font-weight:600}
+.prop-total-row.destaque{border-top:1px solid rgba(255,255,255,.1);padding-top:10px;margin-top:6px}
+.prop-total-row.destaque .prop-total-lbl{color:#fff;font-weight:700;font-size:.9rem}
+.prop-total-row.destaque .prop-total-val{color:var(--gold);font-size:1.3rem;font-weight:900}
+.prop-pts-total{margin-top:10px;text-align:center;font-family:var(--font2);font-size:.78rem;color:rgba(255,255,255,.4);padding-top:10px;border-top:1px solid rgba(255,255,255,.06)}
+.prop-pts-total span{color:var(--gold);font-weight:700;font-size:1rem}
+.prop-footer{background:rgba(0,0,0,.2);padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
+.prop-footer-msg{font-size:.7rem;color:rgba(255,255,255,.4);line-height:1.4;max-width:200px}
+.prop-footer-ambev{font-family:var(--font2);font-size:.8rem;font-weight:900;color:rgba(255,255,255,.3);letter-spacing:.1em;text-transform:uppercase}
+.prop-actions{display:flex;gap:10px;margin-top:14px}
+.btn-wpp{flex:1;background:#25d366;color:#fff;border:none;border-radius:10px;padding:13px;font-family:var(--font2);font-size:.95rem;font-weight:800;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s}
+.btn-wpp:hover{opacity:.9}
+.btn-nova{flex:1;background:transparent;border:2px solid var(--border);color:var(--muted);border-radius:10px;padding:13px;font-family:var(--font2);font-size:.95rem;font-weight:700;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;transition:all .15s}
+.btn-nova:hover{border-color:var(--navy);color:var(--navy)}
+
+.erro-voz{background:#fff0f0;border:1.5px solid #ffc0c0;border-radius:8px;padding:10px 12px;font-size:.78rem;color:var(--red);margin-top:8px;display:none}
+.erro-voz.show{display:block}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header>
+  <div class="header-top">
+    <div class="ambev-logo">
+      <svg viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="14" fill="#f5a800"/>
+        <text x="16" y="21" text-anchor="middle" font-family="Arial Black" font-size="11" font-weight="900" fill="#0d1f3c">Ab</text>
+      </svg>
+    </div>
+    <div>
+      <h1>Gerador de Proposta</h1>
+      <p>Voz ou manual — proposta em segundos</p>
+    </div>
+  </div>
+</header>
+
+<!-- Cliente -->
+<div class="section">
+  <div class="section-title">Cliente</div>
+  <div class="field">
+    <label>Nome do cliente / PDV</label>
+    <input type="text" id="nomeCliente" placeholder="Ex: Bar do João" oninput="checkForm()">
+  </div>
+</div>
+
+<!-- VOZ -->
+<div class="voz-section">
+  <div class="voz-title">🎤 Pedido por voz</div>
+  <button class="btn-mic" id="btnMic" onclick="toggleVoz()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8"/>
+    </svg>
+    <span id="btnMicTxt">Falar pedido</span>
+  </button>
+  <div class="voz-status" id="vozStatus">Toque para começar a falar</div>
+  <div class="voz-transcricao" id="vozTranscricao"></div>
+  <div class="erro-voz" id="erroVoz"></div>
+  <div class="voz-hint">Exemplo: "5 caixas de Brahma 600 a 153 reais com 10% de desconto e 500 pontos, 3 caixas de Skol 600 a 135 reais"</div>
+</div>
+
+<!-- CONFIRMAÇÃO DE VOZ -->
+<div class="confirmacao-wrap" id="confirmacaoWrap">
+  <div class="conf-title">⚡ Confirme o pedido</div>
+  <div id="confItens"></div>
+  <div class="conf-acoes">
+    <button class="btn-confirmar" onclick="confirmarPedido()">✓ Confirmar e adicionar</button>
+    <button class="btn-rejeitar" onclick="rejeitarPedido()">✕ Descartar</button>
+  </div>
+</div>
+
+<!-- PRODUTOS ADICIONADOS -->
+<div class="section">
+  <div class="section-title">Produtos</div>
+  <div class="select-produto-wrap">
+    <select id="selProdAdd"><option value="">— adicionar manualmente —</option></select>
+    <button class="btn-add-manual" onclick="adicionarManual()">+ Add</button>
+  </div>
+  <div id="listaProdutos"></div>
+</div>
+
+<button class="btn-gerar" id="btnGerar" onclick="gerarProposta()" disabled>Gerar Proposta →</button>
+
+<!-- PROPOSTA GERADA -->
+<div id="propostaWrap">
+  <div class="proposta" id="proposta">
+    <div class="prop-header">
+      <div class="prop-header-top">
+        <div class="prop-logo">
+          <div class="prop-logo-box">
+            <svg viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="14" fill="#0d1f3c"/>
+              <text x="16" y="21" text-anchor="middle" font-family="Arial Black" font-size="11" font-weight="900" fill="#f5a800">Ab</text>
+            </svg>
+          </div>
+          <div>
+            <div class="prop-logo-text">AMBEV</div>
+            <div class="prop-logo-sub">Proposta Comercial</div>
+          </div>
+        </div>
+        <div class="prop-validade">✦ Válido enquanto durar a ação</div>
+      </div>
+      <div class="prop-cliente-box">
+        <div class="prop-cliente-label">Proposta para</div>
+        <div class="prop-cliente-nome" id="prop-cliente">—</div>
+      </div>
+    </div>
+    <div class="prop-body">
+      <div class="prop-table-header">
+        <span>Produto</span><span>Qtd</span><span>Preço/cx</span><span>Desc.</span><span>Total</span>
+      </div>
+      <div id="prop-rows"></div>
+      <div class="prop-totais">
+        <div class="prop-total-row"><span class="prop-total-lbl">Subtotal</span><span class="prop-total-val" id="prop-subtotal">—</span></div>
+        <div class="prop-total-row"><span class="prop-total-lbl">Desconto total</span><span class="prop-total-val" id="prop-desconto">—</span></div>
+        <div class="prop-total-row destaque"><span class="prop-total-lbl">TOTAL DA PROPOSTA</span><span class="prop-total-val" id="prop-total">—</span></div>
+      </div>
+      <div class="prop-pts-total" id="prop-pts-total" style="display:none">
+        🏆 Total de pontos do pedido: <span id="prop-pts-val">0</span> pts
+      </div>
+    </div>
+    <div class="prop-footer">
+      <div class="prop-footer-msg">Oferta sujeita à disponibilidade. Válido enquanto durar a ação.</div>
+      <div class="prop-footer-ambev">AMBEV</div>
+    </div>
+  </div>
+  <div class="prop-actions">
+    <button class="btn-wpp" onclick="enviarWpp()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Enviar no WhatsApp
+    </button>
+    <button class="btn-nova" onclick="novaProposta()">↩ Nova</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+const PRODUTOS = [
+  {marca:"Antarctica Pilsen", nome:"Antarctica 300ML",       unid:23, aliases:["antarctica 300","antártica 300","ap 300","antarctica trezentos"]},
+  {marca:"Antarctica Pilsen", nome:"Antarctica 600ML",       unid:24, aliases:["antarctica 600","antártica 600","ap 600","antarctica seiscentos"]},
+  {marca:"Antarctica Pilsen", nome:"Antarctica 1L",          unid:12, aliases:["antarctica 1l","antártica 1 litro","ap 1l","antarctica litro"]},
+  {marca:"Brahma Chopp",      nome:"Brahma Chopp 300ML",     unid:23, aliases:["brahma 300","brahma chopp 300","brahma trezentos","brahma 300ml"]},
+  {marca:"Brahma Chopp",      nome:"Brahma Chopp 600ML",     unid:24, aliases:["brahma 600","brahma chopp 600","brahma seiscentos","brahma 600ml","bc 600"]},
+  {marca:"Brahma Chopp",      nome:"Brahma Chopp 1L",        unid:12, aliases:["brahma 1l","brahma litro","brahma chopp litro","brahma 1 litro"]},
+  {marca:"Brahma Chopp Zero", nome:"Brahma Chopp Zero 300ML",unid:23, aliases:["brahma zero","brahma chopp zero","zero 300","brahma zero 300"]},
+  {marca:"Budweiser",         nome:"Budweiser 300ML",        unid:23, aliases:["budweiser 300","bud 300","budweiser trezentos"]},
+  {marca:"Budweiser",         nome:"Budweiser 600ML",        unid:24, aliases:["budweiser 600","bud 600","budweiser seiscentos","budweiser 600ml"]},
+  {marca:"Budweiser",         nome:"Budweiser 1L",           unid:12, aliases:["budweiser 1l","bud litro","budweiser litro","budweiser 1 litro"]},
+  {marca:"Corona",            nome:"Corona 600ML",           unid:24, aliases:["corona 600","corona seiscentos","corona 600ml"]},
+  {marca:"Corona",            nome:"Corona Long Neck 330ML", unid:28, aliases:["corona long neck","corona long","corona 330","corona ln"]},
+  {marca:"Original",          nome:"Original 300ML",         unid:23, aliases:["original 300","original trezentos","original 300ml"]},
+  {marca:"Original",          nome:"Original 600ML",         unid:24, aliases:["original 600","original seiscentos","original 600ml"]},
+  {marca:"Original",          nome:"Original 1L",            unid:12, aliases:["original 1l","original litro","original 1 litro"]},
+  {marca:"Serramalte",        nome:"Serramalte 600ML",       unid:24, aliases:["serramalte","serramalte 600","serra 600","extra serra"]},
+  {marca:"Skol",              nome:"Skol 300ML",             unid:23, aliases:["skol 300","skol trezentos","skol 300ml"]},
+  {marca:"Skol",              nome:"Skol 600ML",             unid:24, aliases:["skol 600","skol seiscentos","skol 600ml","sk 600"]},
+  {marca:"Skol",              nome:"Skol 1L",                unid:12, aliases:["skol 1l","skol litro","skol 1 litro"]},
+  {marca:"Spaten",            nome:"Spaten 600ML",           unid:24, aliases:["spaten","spaten 600","spaten seiscentos","spaten 600ml"]},
+  {marca:"Stella Artois",     nome:"Stella Artois 600ML",    unid:24, aliases:["stella","stella artois","stella 600","stella artois 600","stella seiscentos"]},
+];
+
+// Popula select manual
+const sel = document.getElementById('selProdAdd');
+let currentMarca = '';
+PRODUTOS.forEach((p,i)=>{
+  if(p.marca!==currentMarca){currentMarca=p.marca;const og=document.createElement('optgroup');og.label=p.marca;sel.appendChild(og);}
+  const o=document.createElement('option');o.value=i;o.textContent=p.nome;sel.lastChild.appendChild(o);
+});
+
+let itens=[], idCount=0, pendentes=[], recognition=null, gravando=false;
+
+// ===== VOZ =====
+function toggleVoz(){
+  if(gravando){pararVoz();return;}
+  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){
+    mostrarErroVoz('Reconhecimento de voz não suportado neste navegador. Use Chrome no Android.');return;
+  }
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  recognition=new SR();
+  recognition.lang='pt-BR';
+  recognition.continuous=false;
+  recognition.interimResults=true;
+  recognition.maxAlternatives=1;
+
+  recognition.onstart=()=>{
+    gravando=true;
+    document.getElementById('btnMic').classList.add('gravando');
+    document.getElementById('btnMicTxt').textContent='Gravando... toque para parar';
+    document.getElementById('vozStatus').textContent='🔴 Ouvindo...';
+    document.getElementById('vozTranscricao').classList.add('show');
+    document.getElementById('vozTranscricao').textContent='...';
+    document.getElementById('erroVoz').classList.remove('show');
+  };
+
+  recognition.onresult=(e)=>{
+    const txt=Array.from(e.results).map(r=>r[0].transcript).join(' ');
+    document.getElementById('vozTranscricao').textContent='"'+txt+'"';
+    if(e.results[e.results.length-1].isFinal){
+      pararVoz();
+      processarFala(txt);
+    }
+  };
+
+  recognition.onerror=(e)=>{
+    pararVoz();
+    mostrarErroVoz('Erro ao capturar voz: '+e.error+'. Verifique o microfone.');
+  };
+
+  recognition.onend=()=>{pararVoz();};
+  recognition.start();
+}
+
+function pararVoz(){
+  gravando=false;
+  if(recognition){try{recognition.stop();}catch(e){}}
+  document.getElementById('btnMic').classList.remove('gravando');
+  document.getElementById('btnMicTxt').textContent='Falar pedido';
+  document.getElementById('vozStatus').textContent='Toque para falar novamente';
+}
+
+function mostrarErroVoz(msg){
+  const el=document.getElementById('erroVoz');
+  el.textContent=msg;
+  el.classList.add('show');
+}
+
+// ===== PROCESSAMENTO DA FALA =====
+function processarFala(texto){
+  const t=texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  // Extrair múltiplos itens — separa por "e" ou vírgula entre produtos
+  const blocos=splitBlocos(t);
+  pendentes=[];
+
+  blocos.forEach(bloco=>{
+    const item=extrairItem(bloco);
+    if(item) pendentes.push(item);
+  });
+
+  if(!pendentes.length){
+    mostrarErroVoz('Não consegui identificar produtos. Tente: "5 caixas de Brahma 600 a 153 reais com 10% de desconto"');
+    return;
+  }
+  mostrarConfirmacao();
+}
+
+function splitBlocos(t){
+  // Divide em múltiplos produtos por padrões como "e X caixas de" ou vírgula
+  const partes=t.split(/,\s*(?=\d)|,\s*(?=[a-z]+\s+\d+)|(?:\s+e\s+)(?=\d+\s+caixa)/i);
+  return partes.filter(p=>p.trim().length>3);
+}
+
+function extrairItem(t){
+  // Quantidade
+  const qtdMap={'uma':1,'um':1,'duas':2,'dois':2,'tres':3,'três':3,'quatro':4,'cinco':5,'seis':6,'sete':7,'oito':8,'nove':9,'dez':10};
+  let qtd=1;
+  const mQtd=t.match(/(\d+)\s*caixa/i);
+  if(mQtd) qtd=parseInt(mQtd[1]);
+  else{
+    for(const[word,num] of Object.entries(qtdMap)){
+      if(t.includes(word+' caixa')||t.startsWith(word+' ')){qtd=num;break;}
+    }
+  }
+
+  // Preço
+  let preco=0;
+  const mPreco=t.match(/(?:a|por|de)\s*(?:r\$?\s*)?(\d+[\.,]?\d*)\s*(?:real|reais|por caixa)?/i);
+  if(mPreco) preco=parseFloat(mPreco[1].replace(',','.'));
+
+  // Desconto
+  let desc=0;
+  const mDesc=t.match(/(\d+)\s*(?:%|porcento|por\s*cento)\s*(?:de\s*)?(?:desconto)?/i);
+  if(mDesc) desc=parseInt(mDesc[1]);
+
+  // Pontos
+  let pontos=0;
+  const mPts=t.match(/(\d+)\s*(?:pontos|pts|ponto)/i);
+  if(mPts) pontos=parseInt(mPts[1]);
+
+  // Produto
+  const prod=identificarProduto(t);
+  if(!prod) return null;
+
+  return {prodIdx:PRODUTOS.indexOf(prod), nome:prod.nome, qtd, preco, desc, pontos};
+}
+
+function identificarProduto(t){
+  // Normaliza
+  const tn=t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+  // Tenta match por aliases primeiro
+  let melhor=null, melhorScore=0;
+  PRODUTOS.forEach(p=>{
+    const allAliases=[p.nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''), ...p.aliases];
+    allAliases.forEach(alias=>{
+      if(tn.includes(alias)&&alias.length>melhorScore){
+        melhor=p; melhorScore=alias.length;
+      }
+    });
+  });
+  return melhor;
+}
+
+// ===== CONFIRMAÇÃO =====
+function mostrarConfirmacao(){
+  const wrap=document.getElementById('confirmacaoWrap');
+  const cont=document.getElementById('confItens');
+  cont.innerHTML='';
+
+  pendentes.forEach((item,i)=>{
+    const div=document.createElement('div');
+    div.className='conf-item';
+    div.innerHTML=`
+      <div class="conf-item-top">
+        <span class="conf-item-nome">${item.nome}</span>
+      </div>
+      <div class="conf-item-campos">
+        <div class="conf-campo"><label>Qtd (cx)</label><input type="number" value="${item.qtd}" min="1" id="conf-qtd-${i}"></div>
+        <div class="conf-campo"><label>Preço/cx R$</label><input type="number" value="${item.preco||''}" step="0.01" placeholder="0,00" id="conf-preco-${i}"></div>
+        <div class="conf-campo"><label>Desc %</label><input type="number" value="${item.desc||0}" min="0" max="100" id="conf-desc-${i}"></div>
+        <div class="conf-campo"><label>Pontos</label><input type="number" value="${item.pontos||0}" min="0" id="conf-pts-${i}"></div>
+      </div>`;
+    cont.appendChild(div);
+  });
+
+  wrap.classList.add('show');
+  wrap.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function confirmarPedido(){
+  pendentes.forEach((item,i)=>{
+    const qtd=parseFloat(document.getElementById('conf-qtd-'+i).value)||1;
+    const preco=parseFloat(document.getElementById('conf-preco-'+i).value)||0;
+    const desc=parseFloat(document.getElementById('conf-desc-'+i).value)||0;
+    const pts=parseInt(document.getElementById('conf-pts-'+i).value)||0;
+    idCount++;
+    itens.push({id:idCount, nome:item.nome, unid:PRODUTOS[item.prodIdx]?.unid||24, qtd, preco, desc, pontos:pts});
+  });
+  pendentes=[];
+  document.getElementById('confirmacaoWrap').classList.remove('show');
+  document.getElementById('vozTranscricao').textContent='';
+  document.getElementById('vozTranscricao').classList.remove('show');
+  renderItens();
+  checkForm();
+}
+
+function rejeitarPedido(){
+  pendentes=[];
+  document.getElementById('confirmacaoWrap').classList.remove('show');
+  document.getElementById('vozTranscricao').classList.remove('show');
+}
+
+// ===== ITENS MANUAL =====
+function adicionarManual(){
+  const idx=document.getElementById('selProdAdd').value;
+  if(idx==='') return;
+  const p=PRODUTOS[parseInt(idx)];
+  idCount++;
+  itens.push({id:idCount, nome:p.nome, unid:p.unid, qtd:1, preco:'', desc:0, pontos:0});
+  document.getElementById('selProdAdd').value='';
+  renderItens();
+  checkForm();
+}
+
+function renderItens(){
+  const lista=document.getElementById('listaProdutos');
+  if(!itens.length){lista.innerHTML='';return;}
+  lista.innerHTML=itens.map(it=>`
+    <div class="produto-item" id="item-${it.id}">
+      <div class="produto-item-top">
+        <span class="produto-nome">${it.nome}</span>
+        <button class="btn-remove" onclick="removerItem(${it.id})">✕</button>
+      </div>
+      <div class="produto-inputs">
+        <div><label>Qtd (cx)</label><input type="number" min="1" value="${it.qtd}" onchange="updateItem(${it.id},'qtd',this.value)" oninput="updateItem(${it.id},'qtd',this.value)"></div>
+        <div><label>Preço/cx R$</label><input type="number" min="0" step="0.01" value="${it.preco}" placeholder="0,00" onchange="updateItem(${it.id},'preco',this.value)" oninput="updateItem(${it.id},'preco',this.value)"></div>
+        <div><label>Desc %</label><input type="number" min="0" max="100" value="${it.desc}" placeholder="0" onchange="updateItem(${it.id},'desc',this.value)" oninput="updateItem(${it.id},'desc',this.value)"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+        <label style="font-size:.6rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap">🏆 Pontos</label>
+        <input type="number" min="0" value="${it.pontos||0}" style="flex:1;font-size:.82rem;padding:5px 8px" onchange="updateItem(${it.id},'pontos',this.value)" oninput="updateItem(${it.id},'pontos',this.value)">
+      </div>
+      <div class="produto-total" id="tot-${it.id}">${getItemTotalStr(it)}</div>
+    </div>`).join('');
+}
+
+function getItemTotal(it){
+  const qtd=parseFloat(it.qtd)||0,preco=parseFloat(it.preco)||0,desc=parseFloat(it.desc)||0;
+  const sub=qtd*preco,dv=sub*(desc/100);
+  return{sub,dv,total:sub-dv};
+}
+function getItemTotalStr(it){
+  const t=getItemTotal(it);
+  if(!t.total) return '';
+  return 'Total: <span>'+fmtBRL(t.total)+'</span>';
+}
+function updateItem(id,campo,val){
+  const it=itens.find(x=>x.id===id);
+  if(!it) return;
+  it[campo]=val;
+  const el=document.getElementById('tot-'+id);
+  if(el) el.innerHTML=getItemTotalStr(it);
+  checkForm();
+}
+function removerItem(id){itens=itens.filter(x=>x.id!==id);renderItens();checkForm();}
+function checkForm(){
+  const nome=document.getElementById('nomeCliente').value.trim();
+  const temItens=itens.some(it=>parseFloat(it.preco)>0&&parseInt(it.qtd)>0);
+  document.getElementById('btnGerar').disabled=!(nome&&temItens);
+}
+function fmtBRL(v){return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+
+// ===== GERAR PROPOSTA =====
+function gerarProposta(){
+  const nome=document.getElementById('nomeCliente').value.trim();
+  document.getElementById('prop-cliente').textContent=nome.toUpperCase();
+  const itensFiltrados=itens.filter(it=>parseFloat(it.preco)>0&&parseInt(it.qtd)>0);
+  let subG=0,descG=0,ptsG=0;
+
+  const rows=itensFiltrados.map(it=>{
+    const t=getItemTotal(it);subG+=t.sub;descG+=t.dv;
+    const pts=parseInt(it.pontos)||0;ptsG+=pts;
+    const ptsHtml=pts>0?`<div class="prop-row-pts">🏆 ${pts} pts</div>`:'';
+    const descStr=it.desc>0?`<span class="prop-row-val desc">-${parseFloat(it.desc).toFixed(0)}%</span>`:`<span class="prop-row-val">—</span>`;
+    return`<div class="prop-row">
+      <div><div class="prop-row-nome">${it.nome}</div>${ptsHtml}</div>
+      <div class="prop-row-val">${parseInt(it.qtd)} cx</div>
+      <div class="prop-row-val">${fmtBRL(parseFloat(it.preco))}</div>
+      ${descStr}
+      <div class="prop-row-val total">${fmtBRL(t.total)}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('prop-rows').innerHTML=rows;
+  document.getElementById('prop-subtotal').textContent=fmtBRL(subG);
+  document.getElementById('prop-desconto').textContent=descG>0?'-'+fmtBRL(descG):'—';
+  document.getElementById('prop-total').textContent=fmtBRL(subG-descG);
+
+  const ptsEl=document.getElementById('prop-pts-total');
+  if(ptsG>0){ptsEl.style.display='block';document.getElementById('prop-pts-val').textContent=ptsG.toLocaleString('pt-BR');}
+  else{ptsEl.style.display='none';}
+
+  const wrap=document.getElementById('propostaWrap');
+  wrap.style.display='block';wrap.classList.add('show');
+  wrap.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ===== WHATSAPP =====
+function enviarWpp(){
+  const nome=document.getElementById('nomeCliente').value.trim();
+  const itensFiltrados=itens.filter(it=>parseFloat(it.preco)>0&&parseInt(it.qtd)>0);
+  let subG=0,descG=0,ptsG=0;
+  let linhas=itensFiltrados.map(it=>{
+    const t=getItemTotal(it);subG+=t.sub;descG+=t.dv;
+    const pts=parseInt(it.pontos)||0;ptsG+=pts;
+    const descTxt=it.desc>0?` (-${parseFloat(it.desc).toFixed(0)}%)`:'';
+    const ptsTxt=pts>0?` | 🏆 ${pts} pts`:'';
+    return`• ${it.nome}: ${parseInt(it.qtd)} cx × ${fmtBRL(parseFloat(it.preco))}${descTxt} = *${fmtBRL(t.total)}*${ptsTxt}`;
+  }).join('\n');
+  const total=subG-descG;
+  let msg=`🍺 *PROPOSTA AMBEV*\n\nCliente: *${nome.toUpperCase()}*\n\n${linhas}\n\n`;
+  if(descG>0) msg+=`Desconto total: -${fmtBRL(descG)}\n`;
+  msg+=`*TOTAL: ${fmtBRL(total)}*`;
+  if(ptsG>0) msg+=`\n🏆 *${ptsG.toLocaleString('pt-BR')} pontos*`;
+  msg+=`\n\n_Válido enquanto durar a ação._`;
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+}
+
+function novaProposta(){
+  itens=[];idCount=0;pendentes=[];
+  document.getElementById('nomeCliente').value='';
+  document.getElementById('listaProdutos').innerHTML='';
+  document.getElementById('propostaWrap').classList.remove('show');
+  document.getElementById('propostaWrap').style.display='none';
+  document.getElementById('confirmacaoWrap').classList.remove('show');
+  document.getElementById('vozTranscricao').classList.remove('show');
+  document.getElementById('erroVoz').classList.remove('show');
+  document.getElementById('btnGerar').disabled=true;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

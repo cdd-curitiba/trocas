@@ -108,7 +108,7 @@ select option{background:#1e3a5f}
       <div class="topbar-logo">TR</div>
       <div>
         <h1>Trocas & Reposições</h1>
-        <div class="sub">CDD Curitiba · atualizado em 04/06/2026 19:51</div>
+        <div class="sub">CDD Curitiba · atualizado em 04/06/2026 19:54</div>
       </div>
     </div>
   </div>
@@ -247,7 +247,7 @@ const DATA = [{"setor":"11","sala":"1","cliente":"20566","pendente":true,"urgenc
 
 // Deriva sala a partir do número do setor (centena): 1xx→1, 2xx→2, etc.
 function salaDoSetor(setor){
-  return String(Math.floor(parseInt(setor)/100));
+  return String(setor).trim().charAt(0);
 }
 
 function onSalaChange(){

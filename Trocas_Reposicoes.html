@@ -99,7 +99,7 @@ select option{background:#1e3a5f}
   <div class="topbar-inner">
     <div>
       <h1>Trocas & Reposições</h1>
-      <div class="sub">CDD Curitiba · atualizado em 04/06/2026 19:16</div>
+      <div class="sub">CDD Curitiba · atualizado em 04/06/2026 19:28</div>
     </div>
     <div class="pills">
       <span class="pill critico" id="p-critico">—</span>
@@ -206,20 +206,11 @@ select option{background:#1e3a5f}
         <option value="Simples Remessa">Simples Remessa</option>
       </select>
     </div>
-    <div class="fg"><label>Sit. Pedido</label>
-      <select id="filSitPedido" onchange="render()">
-        <option value="all">Todas</option>
-        <option value="Ag. Roteirização">Ag. Roteirização</option>
-        <option value="Faturado">Faturado</option>
-        <option value="MPD Emitido">MPD Emitido</option>
-      </select>
-    </div>
     <div class="fg"><label>Sit. Atendimento</label>
       <select id="filSitAtend" onchange="render()">
         <option value="all">Todas</option>
-        <option value="Ag. Atendimento">Ag. Atendimento</option>
-        <option value="Atendido">Atendido</option>
-        <option value="Atendido Parcial">Atendido Parcial</option>
+        <option value="Aguard. Pedido">Aguard. Pedido</option>
+        <option value="Atendido">Atendido / Parcial</option>
         <option value="Falta">Falta</option>
       </select>
     </div>
@@ -261,7 +252,6 @@ function render(){
   const sala     = document.getElementById('filSala').value;
   const setor    = document.getElementById('filSetor').value;
   const tipo     = document.getElementById('filTipo').value;
-  const sitPed   = document.getElementById('filSitPedido').value;
   const sitAtend = document.getElementById('filSitAtend').value;
   const urg      = document.getElementById('filUrgencia').value;
 
@@ -270,8 +260,13 @@ function render(){
     if(setor!=='all' && d.setor!==setor) return false;
     // Filtro tipo: verifica se algum produto do grupo bate
     if(tipo!=='all' && !d.produtos.some(p=>p.tipo===tipo)) return false;
-    if(sitPed!=='all' && d.sit_pedido!==sitPed) return false;
-    if(sitAtend!=='all' && d.sit_atend!==sitAtend) return false;
+    if(sitAtend!=='all'){
+      const isAguard = d.sit_atend==='Ag. Atendimento' || d.sit_atend==='Aguard. Pedido';
+      const isAtendido = d.sit_atend==='Atendido' || d.sit_atend==='Atendido Parcial';
+      if(sitAtend==='Aguard. Pedido' && !isAguard) return false;
+      if(sitAtend==='Atendido' && !isAtendido) return false;
+      if(sitAtend==='Falta' && d.sit_atend!=='Falta') return false;
+    }
     if(urg!=='all' && d.urgencia!==urg) return false;
     const cod = document.getElementById('filCodigo').value.trim();
     if(cod && !d.cliente.includes(cod)) return false;

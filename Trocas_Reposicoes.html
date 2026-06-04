@@ -108,7 +108,7 @@ select option{background:#1e3a5f}
       <div class="topbar-logo">TR</div>
       <div>
         <h1>Trocas & Reposições</h1>
-        <div class="sub">CDD Curitiba · atualizado em 04/06/2026 19:54</div>
+        <div class="sub">CDD Curitiba · atualizado em 04/06/2026 19:55</div>
       </div>
     </div>
   </div>
@@ -250,19 +250,25 @@ function salaDoSetor(setor){
   return String(setor).trim().charAt(0);
 }
 
+// Todos os setores únicos presentes nos dados (preenchido após DATA ser declarado)
+let ALL_SETORES = [];
+
+function initSetores(){
+  ALL_SETORES = [...new Set(DATA.map(d=>String(d.setor)))].sort((a,b)=>parseInt(a)-parseInt(b));
+}
+
 function onSalaChange(){
   const sala = document.getElementById('filSala').value;
   const setorSel = document.getElementById('filSetor');
-  // Mostra/oculta opções do dropdown de setor conforme sala
-  Array.from(setorSel.options).forEach(o => {
-    if(o.value==='all'){o.style.display='';return;}
-    o.style.display=(sala==='all'||salaDoSetor(o.value)===sala)?'':'none';
-  });
-  // Se o setor atualmente selecionado não pertence à sala, reseta
-  const setorAtual = setorSel.value;
-  if(setorAtual!=='all' && sala!=='all' && salaDoSetor(setorAtual)!==sala){
-    setorSel.value='all';
-  }
+
+  // Recria as options filtrando pela sala (display:none não funciona em <option> no Chrome)
+  const setoresFiltrados = sala==='all'
+    ? ALL_SETORES
+    : ALL_SETORES.filter(s => salaDoSetor(s)===sala);
+
+  setorSel.innerHTML = '<option value="all">Todos os setores</option>'
+    + setoresFiltrados.map(s=>`<option value="${s}">Setor ${s}</option>`).join('');
+
   render();
 }
 
@@ -384,6 +390,7 @@ function render(){
     </div>`;
   }).join('');
 }
+initSetores();
 render();
 </script>
 </body>

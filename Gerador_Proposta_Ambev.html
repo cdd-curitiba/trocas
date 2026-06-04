@@ -173,12 +173,12 @@ select option{background:#fff}
       <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
       <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8"/>
     </svg>
-    <span id="btnMicTxt">Falar pedido</span>
+    <span id="btnMicTxt">🎤 Falar pedido</span>
   </button>
   <div class="voz-status" id="vozStatus">Toque para começar a falar</div>
   <div class="voz-transcricao" id="vozTranscricao"></div>
   <div class="erro-voz" id="erroVoz"></div>
-  <div class="voz-hint">Exemplo: "5 caixas de Brahma 600 a 153 reais com 10% de desconto e 500 pontos, 3 caixas de Skol 600 a 135 reais"</div>
+  <div class="voz-hint">Toque para começar e toque novamente para parar. Exemplo: "5 brahma 600 a 153 reais, 3 skol 600 a 135, 2 stella a 190 com 10% de desconto"</div>
 </div>
 
 <!-- CONFIRMAÇÃO DE VOZ -->
@@ -269,17 +269,17 @@ const PRODUTOS = [
   {marca:"Budweiser",         nome:"Budweiser 300ML",        unid:23, aliases:["budweiser 300","bud 300","budweiser trezentos"]},
   {marca:"Budweiser",         nome:"Budweiser 600ML",        unid:24, aliases:["budweiser 600","bud 600","budweiser seiscentos","budweiser 600ml"]},
   {marca:"Budweiser",         nome:"Budweiser 1L",           unid:12, aliases:["budweiser 1l","bud litro","budweiser litro","budweiser 1 litro"]},
-  {marca:"Corona",            nome:"Corona 600ML",           unid:24, aliases:["corona 600","corona seiscentos","corona 600ml"]},
+  {marca:"Corona",            nome:"Corona 600ML",           unid:24, aliases:["corona 600","corona seiscentos","corona 600ml","corana 600","corona"]},
   {marca:"Corona",            nome:"Corona Long Neck 330ML", unid:28, aliases:["corona long neck","corona long","corona 330","corona ln"]},
   {marca:"Original",          nome:"Original 300ML",         unid:23, aliases:["original 300","original trezentos","original 300ml"]},
   {marca:"Original",          nome:"Original 600ML",         unid:24, aliases:["original 600","original seiscentos","original 600ml"]},
   {marca:"Original",          nome:"Original 1L",            unid:12, aliases:["original 1l","original litro","original 1 litro"]},
-  {marca:"Serramalte",        nome:"Serramalte 600ML",       unid:24, aliases:["serramalte","serramalte 600","serra 600","extra serra"]},
+  {marca:"Serramalte",        nome:"Serramalte 600ML",       unid:24, aliases:["serramalte","serramalte 600","serra 600","extra serra","serra malte","sera malte"]},
   {marca:"Skol",              nome:"Skol 300ML",             unid:23, aliases:["skol 300","skol trezentos","skol 300ml"]},
   {marca:"Skol",              nome:"Skol 600ML",             unid:24, aliases:["skol 600","skol seiscentos","skol 600ml","sk 600"]},
   {marca:"Skol",              nome:"Skol 1L",                unid:12, aliases:["skol 1l","skol litro","skol 1 litro"]},
-  {marca:"Spaten",            nome:"Spaten 600ML",           unid:24, aliases:["spaten","spaten 600","spaten seiscentos","spaten 600ml"]},
-  {marca:"Stella Artois",     nome:"Stella Artois 600ML",    unid:24, aliases:["stella","stella artois","stella 600","stella artois 600","stella seiscentos"]},
+  {marca:"Spaten",            nome:"Spaten 600ML",           unid:24, aliases:["spaten","spaten 600","spaten seiscentos","spaten 600ml","espaten","ispaten"]},
+  {marca:"Stella Artois",     nome:"Stella Artois 600ML",    unid:24, aliases:["stella","stella artois","stella 600","stella artois 600","stella seiscentos","estela","estela 600","estela artois","stella long","estela long"]},
 ];
 
 // Popula select manual
@@ -294,16 +294,16 @@ let itens=[], idCount=0, pendentes=[], recognition=null, gravando=false;
 
 // ===== VOZ =====
 function toggleVoz(){
-  if(gravando){pararVoz();return;}
+  if(gravando){pararVoz(true);return;}
   if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){
     mostrarErroVoz('Reconhecimento de voz não suportado neste navegador. Use Chrome no Android.');return;
   }
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   recognition=new SR();
   recognition.lang='pt-BR';
-  recognition.continuous=false;
+  recognition.continuous=true;
   recognition.interimResults=true;
-  recognition.maxAlternatives=1;
+  recognition.maxAlternatives=3;
 
   recognition.onstart=()=>{
     gravando=true;
@@ -315,30 +315,54 @@ function toggleVoz(){
     document.getElementById('erroVoz').classList.remove('show');
   };
 
+  let transcricaoAcumulada='';
   recognition.onresult=(e)=>{
-    const txt=Array.from(e.results).map(r=>r[0].transcript).join(' ');
-    document.getElementById('vozTranscricao').textContent='"'+txt+'"';
-    if(e.results[e.results.length-1].isFinal){
-      pararVoz();
-      processarFala(txt);
+    let interimo='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal){
+        transcricaoAcumulada+=e.results[i][0].transcript+' ';
+      } else {
+        interimo+=e.results[i][0].transcript;
+      }
     }
+    const total=(transcricaoAcumulada+interimo).trim();
+    document.getElementById('vozTranscricao').textContent='"'+total+'"';
   };
+  recognition._transcricao=()=>transcricaoAcumulada;
 
   recognition.onerror=(e)=>{
     pararVoz();
     mostrarErroVoz('Erro ao capturar voz: '+e.error+'. Verifique o microfone.');
   };
 
-  recognition.onend=()=>{pararVoz();};
+  recognition.onend=()=>{
+    if(gravando){
+      // auto-stopped by browser (timeout) - process what we have
+      pararVoz(true);
+    }
+  };
   recognition.start();
 }
 
-function pararVoz(){
+function pararVoz(processar=false){
   gravando=false;
-  if(recognition){try{recognition.stop();}catch(e){}}
+  let txt='';
+  if(recognition){
+    try{
+      if(recognition._transcricao) txt=recognition._transcricao().trim();
+      recognition.stop();
+    }catch(e){}
+  }
   document.getElementById('btnMic').classList.remove('gravando');
   document.getElementById('btnMicTxt').textContent='Falar pedido';
   document.getElementById('vozStatus').textContent='Toque para falar novamente';
+  if(processar && txt){
+    processarFala(txt);
+  } else if(processar){
+    // fallback: pega o que está na transcrição exibida
+    const shown=document.getElementById('vozTranscricao').textContent.replace(/^"|"$/g,'').trim();
+    if(shown) processarFala(shown);
+  }
 }
 
 function mostrarErroVoz(msg){
@@ -367,9 +391,11 @@ function processarFala(texto){
 }
 
 function splitBlocos(t){
-  // Divide em múltiplos produtos por padrões como "e X caixas de" ou vírgula
-  const partes=t.split(/,\s*(?=\d)|,\s*(?=[a-z]+\s+\d+)|(?:\s+e\s+)(?=\d+\s+caixa)/i);
-  return partes.filter(p=>p.trim().length>3);
+  // Divide por vírgula ou " e " antes de quantidade/produto
+  // Ex: "5 brahma 600 a 153, 3 skol 600 a 135 e 2 stella 600 a 190"
+  const partes = t.split(/,\s*|\s+e\s+(?=\d|(?:uma?|dois?|tres|quatro|cinco|seis|sete|oito|nove|dez))/i);
+  // Filtra partes muito curtas
+  return partes.filter(p=>p.trim().length>4);
 }
 
 function extrairItem(t){
